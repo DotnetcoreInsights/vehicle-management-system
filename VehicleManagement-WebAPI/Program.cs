@@ -14,6 +14,9 @@ builder.Services.AddSwaggerGen();
 //Register DbContext in services container
 builder.Services.AddDbContext<VehicleDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("VehicleDbContext")));
 
+//Register Repository
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
