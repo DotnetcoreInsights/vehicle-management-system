@@ -1,4 +1,5 @@
-﻿using VehicleManagement_WebAPI.Models;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using VehicleManagement_WebAPI.Models;
 
 namespace VehicleManagement_WebAPI.Repository
 {
@@ -9,5 +10,6 @@ namespace VehicleManagement_WebAPI.Repository
         void AddVehicle(VehicleModel vehicle);
         bool UpdateVehicle(VehicleModel vehicle);
         bool DeleteVehicle(int vehicleId);
+        bool PatchVehicle(int vehicleId, JsonPatchDocument<VehicleModel> patchDocument);
     }
 }

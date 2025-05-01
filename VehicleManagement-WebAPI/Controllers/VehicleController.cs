@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using VehicleManagement_WebAPI.Models;
 using VehicleManagement_WebAPI.Repository;
@@ -70,6 +71,28 @@ namespace VehicleManagement_WebAPI.Controllers
             else
             {
                 return NotFound("vehicle not found");
+            }
+        }
+
+        [HttpPatch("PatchVehicle/{id}")]
+        public IActionResult PatchVehicle(int id, JsonPatchDocument<VehicleModel> patchDoc)
+        {
+            if(id <= 0)
+            {
+                return BadRequest("Please provide a valid vehicle id");
+            }
+            if(patchDoc == null)
+            {
+                return BadRequest("Invalid patch Document");
+            }
+            bool isPatched = _repository.PatchVehicle(id, patchDoc);
+            if(isPatched)
+            {
+                return Ok("Vehicle information patched successfully");
+            }
+            else
+            {
+                return NotFound("Vehicle not found");
             }
         }
 

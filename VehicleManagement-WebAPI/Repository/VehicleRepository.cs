@@ -1,4 +1,5 @@
-﻿using VehicleManagement_WebAPI.Models;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using VehicleManagement_WebAPI.Models;
 
 namespace VehicleManagement_WebAPI.Repository
 {
@@ -38,6 +39,7 @@ namespace VehicleManagement_WebAPI.Repository
         {
             try
             {
+                vehicle.Id = 0; //Id is a Identity column
                 _context.Vehicles.Add(vehicle);
                 _context.SaveChanges();
             }
@@ -85,7 +87,25 @@ namespace VehicleManagement_WebAPI.Repository
                 throw new Exception("An err occurred while deleting vehicle", ex);
             }
         }
-
+        //HttpPatch
+        public bool PatchVehicle(int vehicleId, JsonPatchDocument<VehicleModel> patchDocument)
+        {
+            try
+            {
+                var vehicle = _context.Vehicles.FirstOrDefault(x => x.Id == vehicleId);
+                if(vehicle != null)
+                {
+                    patchDocument.ApplyTo(vehicle);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("An err occurred while patching vehicle", ex);
+            }
+        }
         private bool VehicleExists(int vehicleId)
         {
             return _context.Vehicles.Any(x => x.Id == vehicleId);
